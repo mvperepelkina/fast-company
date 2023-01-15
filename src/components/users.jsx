@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import API from "../api";
+import SearchStatus from "./searchStatus";
+import User from "./user";
 
 const Users = () => {
     const [users, setUsers] = useState(API.users.fetchAll());
@@ -8,34 +10,17 @@ const Users = () => {
         const filteredUsers = users.filter((user) => user._id !== userId);
         setUsers(filteredUsers);
     };
-    const renderPhrase = (number) => {
-        const basePhrase = " с тобой сегодня";
-        const lastDigit = Number(String(number).slice(-1));
-        if (number === 0) {
-            return "Никто с тобой не тусанёт";
-        } else if (number === 1 || (number > 20 && lastDigit === 1)) {
-            return number + " человек тусанёт" + basePhrase;
-        } else if (
-            (number >= 2 && number <= 4) ||
-            (number > 20 && lastDigit >= 2 && lastDigit <= 4)
-        ) {
-            return number + " человека тусанут" + basePhrase;
-        } else if (number >= 5 && number <= 20) {
-            return number + " человек тусанут" + basePhrase;
-        }
+
+    const toggleBookmark = (id) => {
+        const updatedUsers = users.map((u) =>
+            u._id === id ? { ...u, bookmark: !u.bookmark } : u
+        );
+        setUsers(updatedUsers);
     };
 
     return (
         <>
-            <h1>
-                <span
-                    className={`badge bg-${
-                        users.length > 0 ? "primary" : "danger"
-                    } m-3`}>
-                    {renderPhrase(users.length)}
-                </span>
-            </h1>
-
+            <SearchStatus length={users.length} />
             {users.length > 0 && (
                 <table className="table">
                     <thead>
@@ -45,33 +30,18 @@ const Users = () => {
                             <th scope="col">Профессия</th>
                             <th scope="col">Встретился, раз</th>
                             <th scope="col">Оценка</th>
+                            <th scope="col">Избранное</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((user) => (
-                            <tr key={user._id}>
-                                <td>{user.name}</td>
-                                <td>
-                                    {user.qualities.map((q) => (
-                                        <span
-                                            key={q._id}
-                                            className={`badge bg-${q.color} m-2`}>
-                                            {q.name}
-                                        </span>
-                                    ))}
-                                </td>
-                                <td>{user.profession.name}</td>
-                                <td>{user.completedMeetings}</td>
-                                <td>{user.rate}</td>
-                                <td>
-                                    <button
-                                        onClick={() => handleDelete(user._id)}
-                                        className="btn btn-danger">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
+                            <User
+                                key={user._id}
+                                user={user}
+                                handleDelete={handleDelete}
+                                toggleBookmark={toggleBookmark}
+                            />
                         ))}
                     </tbody>
                 </table>
