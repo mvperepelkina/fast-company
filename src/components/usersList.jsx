@@ -6,11 +6,13 @@ import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
+import SearchForm from "./searchForm";
 
 const UsersList = () => {
     const [users, setUsers] = useState();
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [searchValue, setSearchValue] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
 
     const pageSize = 8;
@@ -30,8 +32,14 @@ const UsersList = () => {
                   JSON.stringify(user.profession) ===
                   JSON.stringify(selectedProf)
           )
+        : searchValue
+        ? users.filter((user) =>
+              user.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
         : users;
+
     const count = users ? filteredUsers.length : 0;
+
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
     const userCrop = users ? paginate(sortedUsers, currentPage, pageSize) : [];
 
@@ -56,11 +64,17 @@ const UsersList = () => {
     };
 
     const handleProfessionSelect = (item) => {
+        setSearchValue("");
         setSelectedProf(item);
     };
 
     const clearFilter = () => {
         setSelectedProf();
+    };
+
+    const handleSearch = ({ target }) => {
+        clearFilter();
+        setSearchValue(target.value);
     };
 
     return (
@@ -86,6 +100,10 @@ const UsersList = () => {
             {users ? (
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <SearchForm
+                        handleSearch={handleSearch}
+                        searchValue={searchValue}
+                    />
                     {count > 0 && (
                         <UserTable
                             users={userCrop}
