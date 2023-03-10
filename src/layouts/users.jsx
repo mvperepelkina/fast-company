@@ -1,11 +1,25 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import User from "../components/user";
-import UsersList from "../components/usersList";
+import UserPage from "../components/page/userPage/userPage";
+import UsersListPage from "../components/page/usersListPage/usersListPage";
+import UserFormEdit from "../components/ui/userFormEdit";
 
 const UsersLayout = () => {
-    const { userId } = useParams();
-    return <>{userId ? <User /> : <UsersList />}</>;
+    const { userId, edit } = useParams();
+
+    return (
+        <>
+            {userId ? (
+                edit ? (
+                    <UserFormEdit />
+                ) : (
+                    <UserPage />
+                )
+            ) : (
+                <UsersListPage />
+            )}
+        </>
+    );
 };
 
 export default UsersLayout;

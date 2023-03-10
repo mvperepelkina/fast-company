@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import API from "../api";
-import QualitiesList from "./qualitiesList";
+import API from "../../../api";
+import QualitiesList from "../../ui/qualities/qualitiesList";
 
-const User = () => {
+const UserPage = () => {
     const { userId } = useParams();
     const history = useHistory();
     const [user, setUser] = useState();
@@ -11,7 +11,7 @@ const User = () => {
         API.users.getById(userId).then((data) => setUser(data));
     }, []);
     const handleClick = () => {
-        history.push("/users");
+        history.push(`/users/${userId}/edit`);
     };
 
     return (
@@ -29,7 +29,7 @@ const User = () => {
                         className="btn btn-outline-primary"
                         onClick={handleClick}
                     >
-                        Все пользователи
+                        Изменить
                     </button>
                 </div>
             ) : (
@@ -39,4 +39,4 @@ const User = () => {
     );
 };
 
-export default User;
+export default UserPage;
