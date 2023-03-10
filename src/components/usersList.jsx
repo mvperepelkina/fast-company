@@ -7,7 +7,7 @@ import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
 
-const Users = () => {
+const UsersList = () => {
     const [users, setUsers] = useState();
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -111,4 +111,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default UsersList;
