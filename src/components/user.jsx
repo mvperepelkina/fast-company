@@ -1,6 +1,7 @@
 import React from "react";
 import BookMark from "./bookmark";
 import Quality from "./quality";
+import PropTypes from "prop-types";
 
 const User = ({ user, handleDelete, toggleBookmark }) => {
     const { _id, name, qualities, profession, completedMeetings, rate } = user;
@@ -9,11 +10,7 @@ const User = ({ user, handleDelete, toggleBookmark }) => {
             <td>{name}</td>
             <td>
                 {qualities.map((q) => (
-                    <Quality
-                        key={q._id}
-                        color={q.color}
-                        name={q.name}
-                    />
+                    <Quality key={q._id} color={q.color} name={q.name} />
                 ))}
             </td>
             <td>{profession.name}</td>
@@ -29,12 +26,17 @@ const User = ({ user, handleDelete, toggleBookmark }) => {
             <td>
                 <button
                     onClick={() => handleDelete(_id)}
-                    className="btn btn-danger">
+                    className="btn btn-danger"
+                >
                     Delete
                 </button>
             </td>
         </tr>
     );
 };
-
+User.propTypes = {
+    user: PropTypes.object,
+    handleDelete: PropTypes.func,
+    toggleBookmark: PropTypes.func
+};
 export default User;

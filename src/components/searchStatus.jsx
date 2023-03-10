@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const SearchStatus = ({ length }) => {
     const renderPhrase = (number) => {
@@ -20,11 +21,16 @@ const SearchStatus = ({ length }) => {
     return (
         <h1>
             <span
-                className={`badge bg-${length > 0 ? "primary" : "danger"} m-3`}>
+                className={`badge bg-${length > 0 ? "primary" : "danger"} m-3`}
+            >
                 {renderPhrase(length)}
             </span>
         </h1>
     );
+};
+
+SearchStatus.propTypes = {
+    length: PropTypes.number.isRequired
 };
 
 export default SearchStatus;
