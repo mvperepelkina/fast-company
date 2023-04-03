@@ -1,42 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
 import API from "../../../api";
-import QualitiesList from "../../ui/qualities/qualitiesList";
+import Comments from "../../ui/comments";
+import MeetingsCard from "../../ui/meetingsCard";
+import QualitiesCard from "../../ui/qualitiesCard";
+import UserCard from "../../ui/userCard";
+import PropTypes from "prop-types";
 
-const UserPage = () => {
-    const { userId } = useParams();
-    const history = useHistory();
+const UserPage = ({ userId }) => {
     const [user, setUser] = useState();
+
     useEffect(() => {
         API.users.getById(userId).then((data) => setUser(data));
     }, []);
-    const handleClick = () => {
-        history.push(`/users/${userId}/edit`);
-    };
-
-    return (
-        <>
-            {user ? (
-                <div className="container">
-                    <h1>{user.name}</h1>
-                    <h3>Профессия: {user.profession.name}</h3>
-                    <div>
-                        <QualitiesList qualities={user.qualities} />
+    if (user) {
+        return (
+            <div className="container">
+                <div className="row gutters-sm">
+                    <div className="col-md-4 mb-3">
+                        <UserCard user={user} />
+                        <QualitiesCard data={user.qualities} />
+                        <MeetingsCard value={user.completedMeetings} />
                     </div>
-                    <div>Встретился, раз: {user.completedMeetings}</div>
-                    <div>Рейтинг: {user.rate}</div>
-                    <button
-                        className="btn btn-outline-primary"
-                        onClick={handleClick}
-                    >
-                        Изменить
-                    </button>
+                    <div className="col-md-8">
+                        <Comments />
+                    </div>
                 </div>
-            ) : (
-                <h1>Loading...</h1>
-            )}
-        </>
-    );
+            </div>
+        );
+    } else {
+        return <h1>Loading...</h1>;
+    }
 };
+
+UserPage.propTypes = { userId: PropTypes.string };
 
 export default UserPage;
