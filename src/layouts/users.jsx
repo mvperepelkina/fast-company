@@ -5,7 +5,8 @@ import UsersListPage from "../components/page/usersListPage/usersListPage";
 import UserFormEdit from "../components/ui/userFormEdit";
 
 const UsersLayout = () => {
-    const { userId, edit } = useParams();
+    const params = useParams();
+    const { userId, edit } = params;
 
     return (
         <>
@@ -13,7 +14,7 @@ const UsersLayout = () => {
                 edit ? (
                     <UserFormEdit />
                 ) : (
-                    <UserPage />
+                    <UserPage userId={userId} />
                 )
             ) : (
                 <UsersListPage />
